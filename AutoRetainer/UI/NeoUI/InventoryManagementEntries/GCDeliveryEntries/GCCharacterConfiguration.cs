@@ -13,10 +13,10 @@ public sealed unsafe class GCCharacterConfiguration : InventoryManagementBase
 
     public override void Draw()
     {
-        ImGuiEx.TextWrapped($"Here you can assign preconfigured exchange lists to your registered characters, as well as select delivery mode.");
+        ImGuiEx.TextWrapped(Lang.T($"Here you can assign preconfigured exchange lists to your registered characters, as well as select delivery mode."));
         ImGuiEx.SetNextItemFullWidth();
-        ImGuiEx.FilteringInputTextWithHint("##search", "Search...", out var filter);
-        if(ImGuiEx.BeginDefaultTable(["~Character", "Plan", "Delivery mode"]))
+        ImGuiEx.FilteringInputTextWithHint("##search", Lang.T("Search..."), out var filter);
+        if(ImGuiEx.BeginDefaultTable([Lang.T("~Character"), Lang.T("Plan"), Lang.T("Delivery mode")]))
         {
             foreach(var characterData in C.OfflineData)
             {
@@ -28,9 +28,9 @@ public sealed unsafe class GCCharacterConfiguration : InventoryManagementBase
                 ImGui.TableNextColumn();
                 var plan = characterData.ExchangePlan == Guid.Empty ? null : C.AdditionalGCExchangePlans.FirstOrDefault(p => p.GUID == characterData.ExchangePlan);
                 ImGui.SetNextItemWidth(200f);
-                if(ImGui.BeginCombo("##chPlan", plan?.DisplayName ?? "Default Plan", ImGuiComboFlags.HeightLarge))
+                if(ImGui.BeginCombo("##chPlan", plan?.DisplayName ?? Lang.T("Default Plan"), ImGuiComboFlags.HeightLarge))
                 {
-                    if(ImGui.Selectable("Default Plan", plan == null)) characterData.ExchangePlan = Guid.Empty;
+                    if(ImGui.Selectable(Lang.T("Default Plan"), plan == null)) characterData.ExchangePlan = Guid.Empty;
                     ImGui.Separator();
                     foreach(var exchangePlan in C.AdditionalGCExchangePlans)
                     {

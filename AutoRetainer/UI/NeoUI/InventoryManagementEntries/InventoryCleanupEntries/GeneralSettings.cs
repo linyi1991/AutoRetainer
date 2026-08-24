@@ -33,7 +33,7 @@ public class GeneralSettings : InventoryManagementBase
             {
                 ImGuiEx.TextV(t);
                 ImGui.SameLine();
-                ImGuiEx.RadioButtonBool("Desynthese", "Skip", ref InventoryCleanupCommon.SelectedPlan.IMEnableItemDesynthesisFromArmory, true);
+                ImGuiEx.RadioButtonBool(Lang.T("Desynthese"), Lang.T("Skip"), ref InventoryCleanupCommon.SelectedPlan.IMEnableItemDesynthesisFromArmory, true);
             })
             .Unindent()
             .Checkbox($"Enable context menu integration", () => ref InventoryCleanupCommon.SelectedPlan.IMEnableContextMenu)
