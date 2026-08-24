@@ -12,13 +12,13 @@ internal static class UIUtils
     {
         ref var dragDrop = ref Ref<ImGuiEx.RealtimeDragDrop<T>>.Get($"dsel{id}", () => new($"dsel{id}", x => x.ToString()));
         ImGui.PushID(id);
-        if(ImGui.BeginCombo("##addNew", "Add Entries...", ImGuiComboFlags.HeightLarge))
+        if(ImGui.BeginCombo("##addNew", Lang.T("Add Entries..."), ImGuiComboFlags.HeightLarge))
         {
             foreach(var x in Enum.GetValues<T>())
             {
                 if(!list.Contains(x))
                 {
-                    if(ImGui.Selectable(x.ToStringEx(), false, ImGuiSelectableFlags.DontClosePopups))
+                    if(ImGui.Selectable(Lang.T(x.ToStringEx()), false, ImGuiSelectableFlags.DontClosePopups))
                     {
                         list.Add(x);
                     }
@@ -38,7 +38,7 @@ internal static class UIUtils
                 new TickScheduler(() => list.Remove(x));
             }
             ImGui.SameLine();
-            ImGuiEx.Text(x.ToStringEx());
+            ImGuiEx.Text(Lang.T(x.ToStringEx()));
             ImGui.PopID();
         }
         dragDrop.End();
