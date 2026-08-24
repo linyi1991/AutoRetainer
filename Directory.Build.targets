@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <DalamudLibPath>$(HOME)/Library/Application Support/XIV on Mac in TC/dalamud/Hooks/dev/</DalamudLibPath>
+    <DALAMUD_HOME>$(DalamudLibPath)</DALAMUD_HOME>
+  </PropertyGroup>
+</Project>
