@@ -29,6 +29,7 @@ using ECommons.UIHelpers.AddonMasterImplementations;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using Lumina.Excel.Sheets;
 using NotificationMasterAPI;
+using NightmareUI.PrimaryUI;
 using PunishLib;
 using System.Diagnostics;
 using Action = System.Action;
@@ -129,6 +130,7 @@ public unsafe class AutoRetainer : IDalamudPlugin
         config = EzConfig.Init<Config>();
 
         //windows
+        NuiBuilder.Translate = Lang.T;
         WindowSystem = new();
         VenturePlanner = new();
         VentureBrowser = new();
