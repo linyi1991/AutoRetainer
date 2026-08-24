@@ -12,10 +12,10 @@ namespace AutoRetainer.UI.Windows;
 internal unsafe class SubmarineUnlockPlanUI : Window
 {
     internal string SelectedPlanGuid = Guid.Empty.ToString();
-    internal string SelectedPlanName => VoyageUtils.GetSubmarineUnlockPlanByGuid(SelectedPlanGuid)?.Name ?? "No or unknown plan selected";
+    internal string SelectedPlanName => VoyageUtils.GetSubmarineUnlockPlanByGuid(SelectedPlanGuid)?.Name ?? Lang.T("No or unknown plan selected");
     internal SubmarineUnlockPlan SelectedPlan => VoyageUtils.GetSubmarineUnlockPlanByGuid(SelectedPlanGuid);
 
-    public SubmarineUnlockPlanUI() : base("Submersible Voyage Unlockable Planner")
+    public SubmarineUnlockPlanUI() : base(Lang.T("Submersible Voyage Unlockable Planner"))
     {
         P.WindowSystem.AddWindow(this);
     }
@@ -24,7 +24,7 @@ internal unsafe class SubmarineUnlockPlanUI : Window
     internal Dictionary<uint, bool> RouteExploredCache = [];
     internal int NumUnlockedSubs = 0;
 
-    public static readonly string DrawButtonText = "Open Submarine Unlock Plan Editor";
+    public static readonly string DrawButtonText = Lang.T("Open Submarine Unlock Plan Editor");
     public static void DrawButton()
     {
         if(ImGuiEx.IconButtonWithText(FontAwesomeIcon.LockOpen, DrawButtonText))
@@ -105,7 +105,7 @@ internal unsafe class SubmarineUnlockPlanUI : Window
             }
         }, () =>
         {
-            if(ImGui.Button("New plan"))
+            if(ImGui.Button(Lang.T("New plan")))
             {
                 var x = new SubmarineUnlockPlan();
                 x.Name = $"Plan {x.GUID}";
@@ -116,7 +116,7 @@ internal unsafe class SubmarineUnlockPlanUI : Window
         ImGui.Separator();
         if(SelectedPlan == null)
         {
-            ImGuiEx.Text($"No or unknown plan is selected");
+            ImGuiEx.Text(Lang.T("No or unknown plan is selected"));
         }
         else
         {
@@ -128,73 +128,73 @@ internal unsafe class SubmarineUnlockPlanUI : Window
                 {
                     if(!my.Any())
                     {
-                        ImGuiEx.TextWrapped($"This plan is not used by any submersibles.");
+                        ImGuiEx.TextWrapped(Lang.T("This plan is not used by any submersibles."));
                     }
                     else
                     {
-                        ImGuiEx.TextWrapped($"This plan is used by {my.Select(X => X.Key).Print()}.");
+                        ImGuiEx.TextWrapped($"此計畫使用於 {my.Select(X => X.Key).Print()}。");
                     }
                 }
                 else
                 {
                     if(!my.Any())
                     {
-                        ImGuiEx.TextWrapped($"This plan is used by {users} submersibles of your other characters.");
+                        ImGuiEx.TextWrapped($"此計畫使用於其他角色的 {users} 艘潛水艇。");
                     }
                     else
                     {
-                        ImGuiEx.TextWrapped($"This plan is used by {my.Select(X => X.Key).Print()} and {users} more submersibles on other characters.");
+                        ImGuiEx.TextWrapped($"此計畫使用於 {my.Select(X => X.Key).Print()}，以及其他角色的另外 {users} 艘潛水艇。");
                     }
                 }
             }
             if(C.DefaultSubmarineUnlockPlan == SelectedPlanGuid)
             {
-                ImGuiEx.Text($"This plan is set as default.");
+                ImGuiEx.Text(Lang.T("This plan is set as default."));
                 ImGui.SameLine();
-                if(ImGui.SmallButton("Reset")) C.DefaultSubmarineUnlockPlan = "";
+                if(ImGui.SmallButton(Lang.T("Reset"))) C.DefaultSubmarineUnlockPlan = "";
             }
             else
             {
-                if(ImGui.SmallButton("Set this plan as default")) C.DefaultSubmarineUnlockPlan = SelectedPlanGuid;
+                if(ImGui.SmallButton(Lang.T("Set this plan as default"))) C.DefaultSubmarineUnlockPlan = SelectedPlanGuid;
             }
-            ImGuiEx.TextV("Name: ");
+            ImGuiEx.TextV("名稱：");
             ImGui.SameLine();
             ImGuiEx.SetNextItemFullWidth();
             ImGui.InputText($"##planname", ref SelectedPlan.Name, 100);
             ImGuiEx.LineCentered($"planbuttons", () =>
             {
-                ImGuiEx.TextV($"Apply this plan to:");
+                ImGuiEx.TextV(Lang.T("Apply this plan to:"));
                 ImGui.SameLine();
-                if(ImGui.Button("ALL submersibles"))
+                if(ImGui.Button(Lang.T("ALL submersibles")))
                 {
                     C.OfflineData.Each(x => x.AdditionalSubmarineData.Each(s => s.Value.SelectedUnlockPlan = SelectedPlanGuid));
                 }
                 ImGui.SameLine();
-                if(ImGui.Button("Current character's submersibles"))
+                if(ImGui.Button(Lang.T("Current character's submersibles")))
                 {
                     Data.AdditionalSubmarineData.Each(s => s.Value.SelectedUnlockPlan = SelectedPlanGuid);
                 }
                 ImGui.SameLine();
-                if(ImGui.Button("No submersibles"))
+                if(ImGui.Button(Lang.T("No submersibles")))
                 {
                     C.OfflineData.Each(x => x.AdditionalSubmarineData.Where(s => s.Value.SelectedUnlockPlan == SelectedPlanGuid).Each(s => s.Value.SelectedUnlockPlan = Guid.Empty.ToString()));
                 }
             });
             ImGuiEx.LineCentered($"planbuttons2", () =>
             {
-                if(ImGui.Button($"Copy plan settings"))
+                if(ImGui.Button(Lang.T("Copy plan settings")))
                 {
                     Copy(JsonConvert.SerializeObject(SelectedPlan));
                 }
                 ImGui.SameLine();
-                if(ImGui.Button($"Paste plan settings"))
+                if(ImGui.Button(Lang.T("Paste plan settings")))
                 {
                     try
                     {
                         var unlockPlan = JsonConvert.DeserializeObject<SubmarineUnlockPlan>(Paste());
                         if(!unlockPlan.IsModified())
                         {
-                            Notify.Error("Could not import clipboard content. Is it correct plan?");
+                            Notify.Error("無法匯入剪貼簿內容。請確認是否為正確的計畫資料。");
                         }
                         else
                         {
@@ -208,32 +208,32 @@ internal unsafe class SubmarineUnlockPlanUI : Window
                     }
                 }
                 ImGui.SameLine();
-                if(ImGuiEx.ButtonCtrl("Delete this plan"))
+                if(ImGuiEx.ButtonCtrl(Lang.T("Delete this plan")))
                 {
                     SelectedPlan.Delete = true;
                 }
                 ImGui.SameLine();
-                if(ImGui.Button($"Help"))
+                if(ImGui.Button(Lang.T("Help")))
                 {
-                    Svc.Chat.Print($"Here is the list of all points that can be unlocked. Whenever a plugin needs to select something to unlock, a first available destination will be chosen from this list. Please note that you can NOT simply specify end point of unlocking, you need to select ALL destinations on your way.");
+                    Svc.Chat.Print($"這裡列出所有可解鎖航點。插件需要選擇解鎖目標時，會從此清單選第一個可用目的地。注意：不能只指定最終航點，路徑上的所有目的地都需要選取。");
                 }
             });
             if(ImGui.BeginChild("Plan"))
             {
                 if(!IsSubDataAvail())
                 {
-                    ImGuiEx.TextWrapped($"Access submarine list to retrieve data.");
+                    ImGuiEx.TextWrapped(Lang.T("Access submarine list to retrieve data."));
                 }
-                ImGui.Checkbox($"Unlock submarine slots. Current slots: {GetNumUnlockedSubs()?.ToString() ?? "Unknown"}/4", ref SelectedPlan.UnlockSubs);
-                ImGuiEx.TextWrapped($"Unlocking slots is always prioritized over unlocking routes.");
-                ImGui.Checkbox("Enforce Spam one destination mode in Deep sea site.", ref SelectedPlan.EnforceDSSSinglePoint);
-                ImGui.Checkbox("Set this plan as enforced.", ref SelectedPlan.EnforcePlan);
-                ImGuiEx.HelpMarker("Any point selected for unlock in this map will be executed by every single eligible submarine until everything is actually unlocked");
+                ImGui.Checkbox($"解鎖潛水艇欄位。目前欄位：{GetNumUnlockedSubs()?.ToString() ?? "未知"}/4", ref SelectedPlan.UnlockSubs);
+                ImGuiEx.TextWrapped(Lang.T("Unlocking slots is always prioritized over unlocking routes."));
+                ImGui.Checkbox(Lang.T("Enforce Spam one destination mode in Deep sea site."), ref SelectedPlan.EnforceDSSSinglePoint);
+                ImGui.Checkbox(Lang.T("Set this plan as enforced."), ref SelectedPlan.EnforcePlan);
+                ImGuiEx.HelpMarker(Lang.T("Any point selected for unlock in this map will be executed by every single eligible submarine until everything is actually unlocked"));
                 if(ImGui.BeginTable("##planTable", 3, ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.Borders | ImGuiTableFlags.RowBg))
                 {
-                    ImGui.TableSetupColumn("Zone", ImGuiTableColumnFlags.WidthStretch);
-                    ImGui.TableSetupColumn("Map");
-                    ImGui.TableSetupColumn("Unlocked by");
+                    ImGui.TableSetupColumn(Lang.T("Zone"), ImGuiTableColumnFlags.WidthStretch);
+                    ImGui.TableSetupColumn(Lang.T("Map"));
+                    ImGui.TableSetupColumn(Lang.T("Unlocked by"));
                     ImGui.TableHeadersRow();
                     foreach(var x in Unlocks.PointToUnlockPoint)
                     {
@@ -267,7 +267,7 @@ internal unsafe class SubmarineUnlockPlanUI : Window
                     }
                     ImGui.EndTable();
                 }
-                if(ImGui.CollapsingHeader("Display current point exploration order"))
+                if(ImGui.CollapsingHeader(Lang.T("Display current point exploration order")))
                 {
                     ImGuiEx.Text(SelectedPlan.GetPrioritizedPointList().Select(x => $"{Svc.Data.GetExcelSheet<SubmarineExploration>().GetRowOrDefault(x.point)?.Destination} ({x.justification})").Join("\n"));
                 }
