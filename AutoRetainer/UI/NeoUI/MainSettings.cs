@@ -28,7 +28,7 @@ public class MainSettings : NeoUIEntry
         }, "Only collect venture rewards from the retainer, and will not reassign them.\nHold CTRL when interacting with the Summoning Bell to apply this mode temporarily.")
         .Widget("Reassign", (x) =>
         {
-            if(ImGui.RadioButton("Reassign", !C.EnableAssigningQuickExploration && !C._dontReassign))
+            if(ImGui.RadioButton(x, !C.EnableAssigningQuickExploration && !C._dontReassign))
             {
                 C.EnableAssigningQuickExploration = false;
                 C.DontReassign = false;
