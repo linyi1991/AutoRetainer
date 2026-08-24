@@ -6,6 +6,12 @@
     "Description": "自用 API13 版 AutoRetainer，可自動收取並重新派出僱員探索任務，並保留 AutoPincher 需要的 AutoRetainer 整合介面。",
     "ApplicableVersion": "any",
     "RepoUrl": "https://github.com/PunishXIV/AutoRetainer",
+    "Tags": [
+        "retainer",
+        "automation",
+        "venture",
+        "traditional-chinese"
+    ],
     "DalamudApiLevel": 13,
     "LoadPriority": 0,
     "IconUrl": "https://s3.puni.sh/media/plugin/24/icon-drb6aywk5m9.png"
