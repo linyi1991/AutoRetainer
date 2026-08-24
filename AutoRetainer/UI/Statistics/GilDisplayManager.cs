@@ -11,8 +11,8 @@ public sealed class GilDisplayManager
     public void Draw()
     {
         ImGuiEx.SetNextItemWidthScaled(200f);
-        ImGui.InputInt("Ignore characters/retainers with gil less than", ref C.MinGilDisplay.ValidateRange(0, int.MaxValue));
-        ImGuiComponents.HelpMarker($"Ignored retainer gil still contributes to character/DC total. Character is ignored if their gil AND all retainers' gil is less than this value. Ignored characters do not contribute to DC total.");
+        ImGui.InputInt("忽略金幣少於此值的角色/僱員", ref C.MinGilDisplay.ValidateRange(0, int.MaxValue));
+        ImGuiComponents.HelpMarker($"被忽略的僱員金幣仍會計入角色/資料中心總額。若角色本身與所有僱員金幣都低於此值，該角色會被忽略；被忽略角色不會計入資料中心總額。");
         ref var filter = ref Ref<string>.Get();
         ImGui.Checkbox("Only display character total", ref C.GilOnlyChars);
         ImGui.SameLine();
@@ -64,11 +64,11 @@ public sealed class GilDisplayManager
                         }
                         if(fcdata != null && fcdata.Gil > 0)
                         {
-                            ImGuiEx.Text(ImGuiColors.DalamudYellow, $"        Free Company {fcdata.Name}: {fcdata.Gil:N0}");
+                            ImGuiEx.Text(ImGuiColors.DalamudYellow, $"        部隊 {fcdata.Name}: {fcdata.Gil:N0}");
                         }
                     }
-                    ImGuiEx.Text(ImGuiColors.DalamudViolet, $"    {Censor.Character(c.Name, c.World)}{(fcdata != null && fcdata.Gil > 0 ? "+FC" : "")} total: {charTotal:N0}");
-                    if(ImGuiEx.HoveredAndClicked("Click to relog"))
+                    ImGuiEx.Text(ImGuiColors.DalamudViolet, $"    {Censor.Character(c.Name, c.World)}{(fcdata != null && fcdata.Gil > 0 ? "+部隊" : "")} 總計：{charTotal:N0}");
+                    if(ImGuiEx.HoveredAndClicked("點擊重新登入"))
                     {
                         if(!MultiMode.Relog(c, out var error, Internal.RelogReason.Command))
                         {
@@ -79,11 +79,11 @@ public sealed class GilDisplayManager
                     ImGui.Separator();
                 }
             }
-            ImGuiEx.Text(ImGuiColors.DalamudOrange, $"Data center total ({x.Key}): {dcTotal:N0}");
+            ImGuiEx.Text(ImGuiColors.DalamudOrange, $"資料中心總計 ({x.Key})：{dcTotal:N0}");
             globalTotal += dcTotal;
             ImGui.Separator();
             ImGui.Separator();
         }
-        ImGuiEx.Text(ImGuiColors.DalamudOrange, $"Overall total: {globalTotal:N0}");
+        ImGuiEx.Text(ImGuiColors.DalamudOrange, $"總計：{globalTotal:N0}");
     }
 }

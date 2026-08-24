@@ -106,16 +106,16 @@ internal static class UIUtils
             string error = null;
             if(data.FC == null)
             {
-                error = "Free company house is not registered in Lifestream";
+                error = "部隊房屋尚未在 Lifestream 登錄";
             }
             else if(data.FC.PathToEntrance.Count == 0)
             {
-                error = "Free company house is registered in Lifestream but path to entrance is not set";
+                error = "部隊房屋已在 Lifestream 登錄，但尚未設定入口路徑";
             }
             ImGui.PushFont(UiBuilder.IconFont);
             ImGuiEx.Text(error == null ? null : ImGuiColors.DalamudGrey3, "\uf1ad");
             ImGui.PopFont();
-            ImGuiEx.Tooltip(error ?? $"Free company house is registered in Lifestream and path is set. You will be teleported to Free company house for resending Deployables. If enabled, you will be teleported to Free company house for resending retainers as well.\nAddress: {Svc.Data.GetExcelSheet<Aetheryte>().GetRowOrDefault((uint)data.FC.ResidentialDistrict)?.Territory.Value.PlaceNameRegion.Value.Name}, ward {data.FC.Ward + 1}, plot {data.FC.Plot + 1}");
+            ImGuiEx.Tooltip(error ?? $"部隊房屋已在 Lifestream 登錄並設定入口路徑。重新派出飛空艇/潛水艇時會傳送到部隊房屋；若有啟用，也會為重新派出僱員傳送到部隊房屋。\n地址：{Svc.Data.GetExcelSheet<Aetheryte>().GetRowOrDefault((uint)data.FC.ResidentialDistrict)?.Territory.Value.PlaceNameRegion.Value.Name}，第 {data.FC.Ward + 1} 區，第 {data.FC.Plot + 1} 號");
             ImGui.SameLine(0, 3);
         }
         if(offlineData.GetAllowPrivateTeleportForRetainers())
@@ -123,16 +123,16 @@ internal static class UIUtils
             string error = null;
             if(data.Private == null)
             {
-                error = "Private house is not registered in Lifestream.";
+                error = "個人房屋尚未在 Lifestream 登錄。";
             }
             else if(data.Private.PathToEntrance.Count == 0)
             {
-                error = "Private house is registered in Lifestream but path to entrance is not set.";
+                error = "個人房屋已在 Lifestream 登錄，但尚未設定入口路徑。";
             }
             ImGui.PushFont(UiBuilder.IconFont);
             ImGuiEx.Text(error == null ? null : ImGuiColors.DalamudGrey3, "\ue1b0");
             ImGui.PopFont();
-            ImGuiEx.Tooltip(error ?? $"Private house is registered in Lifestream and path is set. You will be teleported to Private house for resending Retainers.\nAddress: {Svc.Data.GetExcelSheet<Aetheryte>().GetRowOrDefault((uint)data.Private.ResidentialDistrict)?.Territory.Value.PlaceNameRegion.Value.Name}, ward {data.Private.Ward + 1}, plot {data.Private.Plot + 1}");
+            ImGuiEx.Tooltip(error ?? $"個人房屋已在 Lifestream 登錄並設定入口路徑。重新派出僱員時會傳送到個人房屋。\n地址：{Svc.Data.GetExcelSheet<Aetheryte>().GetRowOrDefault((uint)data.Private.ResidentialDistrict)?.Territory.Value.PlaceNameRegion.Value.Name}，第 {data.Private.Ward + 1} 區，第 {data.Private.Plot + 1} 號");
             ImGui.SameLine(0, 3);
         }
         if(offlineData.GetAllowSharedTeleportForRetainers())
@@ -144,22 +144,22 @@ internal static class UIUtils
             {
                 if(sharedData == null)
                 {
-                    error = "Shared estate is not registered in Lifestream.";
+                    error = "共享房屋尚未在 Lifestream 登錄。";
                 }
                 else if(sharedData.PathToEntrance.Count == 0)
                 {
-                    error = "Shared estate is registered in Lifestream but path to entrance is not set.";
+                    error = "共享房屋已在 Lifestream 登錄，但尚未設定入口路徑。";
                 }
             }
             else
             {
-                error = "Can only display shared estate information while player is logged in";
+                error = "只有玩家已登入時才能顯示共享房屋資訊";
                 black = true;
             }
             ImGui.PushFont(UiBuilder.IconFont);
             ImGuiEx.Text(error == null ? null : black?ImGuiColors.DalamudGrey2:ImGuiColors.DalamudGrey3, black ? "\ue4fe" : "\uf004");
             ImGui.PopFont();
-            ImGuiEx.Tooltip(error ?? $"Shared estate is registered in Lifestream and path is set. You will be teleported to Shared estate for resending Retainers.\nAddress: {Svc.Data.GetExcelSheet<Aetheryte>().GetRowOrDefault((uint)sharedData.ResidentialDistrict)?.Territory.Value.PlaceNameRegion.Value.Name}, ward {sharedData.Ward + 1}, plot {sharedData.Plot + 1}");
+            ImGuiEx.Tooltip(error ?? $"共享房屋已在 Lifestream 登錄並設定入口路徑。重新派出僱員時會傳送到共享房屋。\n地址：{Svc.Data.GetExcelSheet<Aetheryte>().GetRowOrDefault((uint)sharedData.ResidentialDistrict)?.Territory.Value.PlaceNameRegion.Value.Name}，第 {sharedData.Ward + 1} 區，第 {sharedData.Plot + 1} 號");
             ImGui.SameLine(0, 3);
         }
     }
@@ -210,7 +210,7 @@ internal static class UIUtils
         {
             fps = GetFPSFromMSPT(frameTime);
         }
-        ImGuiEx.SliderInt(name, ref fps, min, 60, fps == 60 ? "Unlimited" : null, ImGuiSliderFlags.AlwaysClamp);
+        ImGuiEx.SliderInt(name, ref fps, min, 60, fps == 60 ? "無限制" : null, ImGuiSliderFlags.AlwaysClamp);
         frameTime = fps == 60 ? 0 : (int)(1000f / fps);
     }
 

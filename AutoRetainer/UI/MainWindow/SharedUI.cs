@@ -11,7 +11,7 @@ internal static class SharedUI
         if(data.IsLockedOut())
         {
             FontAwesome.PrintV(EColor.RedBright, FontAwesomeIcon.Lock);
-            ImGuiEx.Tooltip("This character is located on a data center which you have temporarily disabled. Navigate to configuration to remove it.");
+            ImGuiEx.Tooltip("此角色位於你暫時停用的資料中心。請到設定中移除此限制。");
             ImGui.SameLine();
         }
     }
@@ -19,7 +19,7 @@ internal static class SharedUI
     internal static void DrawMultiModeHeader(OfflineCharacterData data, string overrideTitle = null)
     {
         var b = true;
-        ImGui.CollapsingHeader($"{Censor.Character(data.Name)} {overrideTitle ?? "Configuration"}##conf", ref b, ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.Bullet | ImGuiTreeNodeFlags.OpenOnArrow);
+        ImGui.CollapsingHeader($"{Censor.Character(data.Name)} {overrideTitle ?? "設定"}##conf", ref b, ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.Bullet | ImGuiTreeNodeFlags.OpenOnArrow);
         if(b == false)
         {
             ImGui.CloseCurrentPopup();
@@ -29,13 +29,13 @@ internal static class SharedUI
 
     internal static void DrawServiceAccSelector(OfflineCharacterData data)
     {
-        ImGuiEx.Text($"Service Account Selection");
+        ImGuiEx.Text($"服務帳號選擇");
         ImGuiEx.SetNextItemWidthScaled(150);
-        if(ImGui.BeginCombo("##Service Account Selection", $"Service Account {data.ServiceAccount + 1}", ImGuiComboFlags.HeightLarge))
+        if(ImGui.BeginCombo("##Service Account Selection", $"服務帳號 {data.ServiceAccount + 1}", ImGuiComboFlags.HeightLarge))
         {
             for(var i = 1; i <= 10; i++)
             {
-                if(ImGui.Selectable($"Service Account {i}"))
+                if(ImGui.Selectable($"服務帳號 {i}"))
                 {
                     data.ServiceAccount = i - 1;
                 }
@@ -56,7 +56,7 @@ internal static class SharedUI
                 }
             }
         }
-        ImGuiComponents.HelpMarker("When operating in multi mode, if there are no other characters with imminent ventures to collect, it will relog back to your preferred character.");
+        ImGuiComponents.HelpMarker("多角色模式運作時，若沒有其他角色即將有僱員探索可收取，會重新登入回你的偏好角色。");
     }
 
     internal static void DrawExcludeReset(OfflineCharacterData data)
@@ -64,22 +64,22 @@ internal static class SharedUI
         new NuiBuilder().Section("Character Data Expunge/Reset", collapsible: true)
         .Widget(() =>
         {
-            if(ImGuiEx.ButtonCtrl("Exclude Character"))
+            if(ImGuiEx.ButtonCtrl("排除角色"))
             {
                 C.Blacklist.Add((data.CID, data.Name));
             }
-            ImGuiComponents.HelpMarker("Excluding this character will immediately reset it's settings, remove it from this list and exclude all retainers from being processed. You can still run manual tasks on it's retainers. You can cancel this action in settings.");
-            if(ImGuiEx.ButtonCtrl("Reset character data"))
+            ImGuiComponents.HelpMarker("排除此角色會立刻重置它的設定、從此清單移除，並排除所有僱員處理。你仍可對它的僱員執行手動任務，也可在設定中取消排除。");
+            if(ImGuiEx.ButtonCtrl("重置角色資料"))
             {
                 new TickScheduler(() => C.OfflineData.RemoveAll(x => x.CID == data.CID));
             }
-            ImGuiComponents.HelpMarker("Character's saved data will be removed without excluding it. Character data will be regenerated once you log back into this character.");
+            ImGuiComponents.HelpMarker("會移除此角色已儲存資料，但不排除它。重新登入此角色後會重新產生角色資料。");
 
-                if(ImGui.Button("Clear Free company data"))
+                if(ImGui.Button("清除部隊資料"))
             {
                 data.ClearFCData();
             }
-            ImGuiComponents.HelpMarker("Free company data, airships and submersibles will be removed from this character. Data will be regenerated once available.");
+            ImGuiComponents.HelpMarker("此角色的部隊資料、飛空艇與潛水艇資料會被移除；再次可讀取時會重新產生。");
         }).Draw();
     }
 }

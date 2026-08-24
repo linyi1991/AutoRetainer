@@ -6,17 +6,17 @@ public static unsafe class RetainerConfig
 {
     public static void Draw(OfflineRetainerData ret, OfflineCharacterData data, AdditionalRetainerData adata)
     {
-        ImGui.CollapsingHeader($"{Censor.Retainer(ret.Name)} - {Censor.Character(data.Name)} Configuration  ##conf", ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.Bullet | ImGuiTreeNodeFlags.OpenOnArrow);
-        ImGuiEx.Text($"Additional Post-venture Tasks:");
+        ImGui.CollapsingHeader($"{Censor.Retainer(ret.Name)} - {Censor.Character(data.Name)} 設定  ##conf", ImGuiTreeNodeFlags.DefaultOpen | ImGuiTreeNodeFlags.Bullet | ImGuiTreeNodeFlags.OpenOnArrow);
+        ImGuiEx.Text($"探索後額外任務：");
         //ImGui.Checkbox($"Entrust Duplicates", ref adata.EntrustDuplicates);
         var selectedPlan = C.EntrustPlans.FirstOrDefault(x => x.Guid == adata.EntrustPlan);
-        ImGuiEx.TextV($"Entrust Items:");
-        if(!C.EnableEntrustManager) ImGuiEx.HelpMarker("Globally disabled in settings", EColor.RedBright, FontAwesomeIcon.ExclamationTriangle.ToIconString());
+        ImGuiEx.TextV($"託管物品：");
+        if(!C.EnableEntrustManager) ImGuiEx.HelpMarker("已在全域設定停用", EColor.RedBright, FontAwesomeIcon.ExclamationTriangle.ToIconString());
         ImGui.SameLine();
         ImGui.SetNextItemWidth(150f);
-        if(ImGui.BeginCombo($"##select", selectedPlan?.Name ?? "Disabled", ImGuiComboFlags.HeightLarge))
+        if(ImGui.BeginCombo($"##select", selectedPlan?.Name ?? "停用", ImGuiComboFlags.HeightLarge))
         {
-            if(ImGui.Selectable("Disabled")) adata.EntrustPlan = Guid.Empty;
+            if(ImGui.Selectable("停用")) adata.EntrustPlan = Guid.Empty;
             for(var i = 0; i < C.EntrustPlans.Count; i++)
             {
                 var plan = C.EntrustPlans[i];
@@ -29,13 +29,13 @@ public static unsafe class RetainerConfig
             }
             ImGui.EndCombo();
         }
-        if(ImGuiEx.IconButtonWithText(FontAwesomeIcon.Copy, "Copy entrust plan to..."))
+        if(ImGuiEx.IconButtonWithText(FontAwesomeIcon.Copy, "複製託管計畫到..."))
         {
             ImGui.OpenPopup($"CopyEntrustPlanTo");
         }
         if(ImGui.BeginPopup("CopyEntrustPlanTo"))
         {
-            if(ImGui.Selectable("To all other retainers of this character"))
+            if(ImGui.Selectable("此角色的所有其他僱員"))
             {
                 var cnt = 0;
                 foreach(var x in data.RetainerData)
@@ -43,9 +43,9 @@ public static unsafe class RetainerConfig
                     cnt++;
                     Utils.GetAdditionalData(data.CID, x.Name).EntrustPlan = adata.EntrustPlan;
                 }
-                Notify.Info($"Changed {cnt} retainers");
+                Notify.Info($"已變更 {cnt} 名僱員");
             }
-            if(ImGui.Selectable("To all other retainers without entrust plan of this character"))
+            if(ImGui.Selectable("此角色沒有託管計畫的其他僱員"))
             {
                 foreach(var x in data.RetainerData)
                 {
@@ -55,10 +55,10 @@ public static unsafe class RetainerConfig
                         Utils.GetAdditionalData(data.CID, x.Name).EntrustPlan = adata.EntrustPlan;
                         cnt++;
                     }
-                    Notify.Info($"Changed {cnt} retainers");
+                    Notify.Info($"已變更 {cnt} 名僱員");
                 }
             }
-            if(ImGui.Selectable("To all other retainers of ALL characters"))
+            if(ImGui.Selectable("所有角色的所有其他僱員"))
             {
                 var cnt = 0;
                 foreach(var offlineData in C.OfflineData)
@@ -69,9 +69,9 @@ public static unsafe class RetainerConfig
                         cnt++;
                     }
                 }
-                Notify.Info($"Changed {cnt} retainers");
+                Notify.Info($"已變更 {cnt} 名僱員");
             }
-            if(ImGui.Selectable("To all other retainers without entrust plan of ALL characters"))
+            if(ImGui.Selectable("所有角色沒有託管計畫的其他僱員"))
             {
                 var cnt = 0;
                 foreach(var offlineData in C.OfflineData)
@@ -86,7 +86,7 @@ public static unsafe class RetainerConfig
                         }
                     }
                 }
-                Notify.Info($"Changed {cnt} retainers");
+                Notify.Info($"已變更 {cnt} 名僱員");
             }
             ImGui.EndPopup();
         }
