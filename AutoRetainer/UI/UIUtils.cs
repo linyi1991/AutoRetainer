@@ -226,7 +226,7 @@ internal static class UIUtils
             P.quickSellItems.Toggle();
         }
         ImGui.SameLine();
-        ImGuiEx.Text("+ right click");
+        ImGuiEx.Text(Lang.T("+ right click"));
     }
 
     private static string KeyInputActive = null;
@@ -238,11 +238,11 @@ internal static class UIUtils
         ImGui.Dummy(new(20, 1));
         ImGui.SameLine();
         ImGuiEx.SetNextItemWidthScaled(200f);
-        if(ImGui.BeginCombo("##inputKey", $"{key}", ImGuiComboFlags.HeightLarge))
+        if(ImGui.BeginCombo("##inputKey", key == LimitedKeys.None ? Lang.T("None") : $"{key}", ImGuiComboFlags.HeightLarge))
         {
             if(text == KeyInputActive)
             {
-                ImGuiEx.Text(ImGuiColors.DalamudYellow, $"Now press new key...");
+                ImGuiEx.Text(ImGuiColors.DalamudYellow, Lang.T("Now press new key..."));
                 foreach(var x in Enum.GetValues<LimitedKeys>())
                 {
                     if(IsKeyPressed(x))
@@ -256,11 +256,11 @@ internal static class UIUtils
             }
             else
             {
-                if(ImGui.Selectable("Auto-detect new key", false, ImGuiSelectableFlags.DontClosePopups))
+                if(ImGui.Selectable(Lang.T("Auto-detect new key"), false, ImGuiSelectableFlags.DontClosePopups))
                 {
                     KeyInputActive = text;
                 }
-                ImGuiEx.Text($"Select key manually:");
+                ImGuiEx.Text(Lang.T("Select key manually:"));
                 ImGuiEx.SetNextItemFullWidth();
                 ImGuiEx.EnumCombo("##selkeyman", ref key);
             }
