@@ -38,12 +38,12 @@ internal unsafe class LoginOverlay : Window
             ImGuiEx.LineCentered(() =>
             {
                 ImGui.SetNextItemWidth(100f);
-                ImGui.InputTextWithHint("##search", "Search...", ref Search, 50);
+                ImGui.InputTextWithHint("##search", "搜尋...", ref Search, 50);
                 if(userServiceAccounts.Count() > 2)
                 {
                     ImGui.SameLine();
                     ImGui.SetNextItemWidth(100f);
-                    ImGuiEx.Combo("##sacc", ref Ref<int>.Get("ServAcc", -1), userServiceAccounts, names: userServiceAccounts.ToDictionary(x => x, x => x == -1 ? "All service accounts" : $"Service account {x + 1}"));
+                    ImGuiEx.Combo("##sacc", ref Ref<int>.Get("ServAcc", -1), userServiceAccounts, names: userServiceAccounts.ToDictionary(x => x, x => x == -1 ? "所有服務帳號" : $"服務帳號 {x + 1}"));
                 }
             });
         }
@@ -72,7 +72,7 @@ internal unsafe class LoginOverlay : Window
             //ImGui.PopFont();
             ImGuiEx.LineCentered("LoginCenter", delegate
         {
-            if(ImGui.Checkbox("Multi Mode", ref MultiMode.Enabled))
+            if(ImGui.Checkbox("Multi Mode 多角色模式", ref MultiMode.Enabled))
             {
                 MultiMode.OnMultiModeEnabled();
             }

@@ -309,9 +309,9 @@ internal static unsafe class WorkshopUI
         ImGui.SetCursorPos(storePos);
         if(ImGui.BeginTable("##retainertable", 4, ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.Borders))
         {
-            ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthStretch);
-            ImGui.TableSetupColumn("Structure");
-            ImGui.TableSetupColumn("Voyage");
+            ImGui.TableSetupColumn("名稱", ImGuiTableColumnFlags.WidthStretch);
+            ImGui.TableSetupColumn("船體");
+            ImGui.TableSetupColumn("航行");
             ImGui.TableSetupColumn("");
             ImGui.TableHeadersRow();
             for(var i = 0; i < data.OfflineAirshipData.Count; i++)

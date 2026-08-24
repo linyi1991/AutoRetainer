@@ -157,21 +157,21 @@ public unsafe class AutoRetainer : IDalamudPlugin
         Svc.ClientState.Logout += Logout;
         Svc.Condition.ConditionChange += ConditionChange;
         EzCmd.Add("/autoretainer", CommandHandler, """
-            Open plugin interface
-            /ays - alias for /autoretainer
-            /autoretainer e|enable → Enable plugin
-            /autoretainer d|disable - Disable plugin
-            /autoretainer t|toggle - toggle plugin
-            /autoretainer m|multi - toggle MultiMode
-            /autoretainer relog Character Name@WorldName - relog to the targeted character if configured
-            /autoretainer b|browser - open venture browser
-            /autoretainer expert - toggle expert settings
-            /autoretainer debug - toggle debug menu and verbose output
-            /autoretainer shutdown <hours> [minutes] [seconds] - schedule a game shutdown in this amount of time
-            /autoretainer itemsell - begin selling items to NPC or retainer if possible
-            /autoretainer het - enter nearby own house or apartment if possible
-            /autoretainer reset - reset all pending tasks
-            /autoretainer deliver - deliver expert delivery items
+            開啟 AutoRetainer 主介面
+            /ays - /autoretainer 的別名
+            /autoretainer e|enable - 啟用插件
+            /autoretainer d|disable - 停用插件
+            /autoretainer t|toggle - 切換插件啟用/停用
+            /autoretainer m|multi - 切換 MultiMode 多角色模式
+            /autoretainer relog Character Name@WorldName - 若已設定此角色，重新登入到指定角色
+            /autoretainer b|browser - 開啟探索任務瀏覽器
+            /autoretainer expert - 切換專家設定
+            /autoretainer debug - 切換除錯選單與詳細輸出
+            /autoretainer shutdown <hours> [minutes] [seconds] - 排程在指定時間後關閉遊戲
+            /autoretainer itemsell - 盡可能開始將物品賣給 NPC 或交給僱員販售
+            /autoretainer het - 盡可能進入附近自己的房屋或公寓
+            /autoretainer reset - 重置所有等待中的任務
+            /autoretainer deliver - 繳納軍票稀有品籌備物品
             """);
         EzCmd.Add("/ays", CommandHandler);
         Svc.Toasts.ErrorToast += Toasts_ErrorToast;

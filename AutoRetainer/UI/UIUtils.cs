@@ -77,7 +77,7 @@ internal static class UIUtils
         if(!C.NoCharaSearch)
         {
             ImGuiEx.SetNextItemFullWidth();
-            ImGui.InputTextWithHint("##search", "Search characters...", ref Ref<string>.Get("SearchChara"), 50);
+            ImGui.InputTextWithHint("##search", "搜尋角色...", ref Ref<string>.Get("SearchChara"), 50);
         }
     }
 
@@ -88,7 +88,7 @@ internal static class UIUtils
             ImGui.PushFont(UiBuilder.IconFont);
             ImGuiEx.Text("\uf0ac");
             ImGui.PopFont();
-            if(ImGuiEx.HoveredAndClicked("Visiting another data center. Right click to clear this status.", ImGuiMouseButton.Right))
+            if(ImGuiEx.HoveredAndClicked("正在拜訪其他資料中心。右鍵可清除此狀態。", ImGuiMouseButton.Right))
             {
                 data.WorldOverride = null;
             }

@@ -8,20 +8,20 @@ public sealed class FcDataManager
 
     public void Draw()
     {
-        ImGui.Checkbox($"Update every 30 hours", ref C.UpdateStaleFCData);
+        ImGui.Checkbox($"每 30 小時更新", ref C.UpdateStaleFCData);
         ImGui.SameLine();
-        if(ImGuiEx.Button("Update", Player.Interactable))
+        if(ImGuiEx.Button("更新", Player.Interactable))
         {
             S.FCPointsUpdater.ScheduleUpdateIfNeeded(true);
         }
         ImGui.SameLine();
-        ImGui.Checkbox($"Show only wallet FC", ref C.DisplayOnlyWalletFC);
+        ImGui.Checkbox($"只顯示錢包部隊", ref C.DisplayOnlyWalletFC);
         if(ImGui.BeginTable("FCData", 5, ImGuiTableFlags.SizingFixedFit | ImGuiTableFlags.Borders | ImGuiTableFlags.RowBg))
         {
-            ImGui.TableSetupColumn($"Name", ImGuiTableColumnFlags.WidthStretch);
-            ImGui.TableSetupColumn($"Characters");
+            ImGui.TableSetupColumn($"名稱", ImGuiTableColumnFlags.WidthStretch);
+            ImGui.TableSetupColumn($"角色");
             ImGui.TableSetupColumn($"Gil");
-            ImGui.TableSetupColumn($"FC points");
+            ImGui.TableSetupColumn($"部隊點數");
             ImGui.TableSetupColumn($"##control");
             ImGui.TableHeadersRow();
 
