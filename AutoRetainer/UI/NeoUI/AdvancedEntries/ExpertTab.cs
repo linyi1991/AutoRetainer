@@ -1,18 +1,35 @@
 ﻿using ECommons.Configuration;
 using ECommons.Reflection;
+using AutoRetainerAPI.Configuration;
 
 namespace AutoRetainer.UI.NeoUI.AdvancedEntries;
 public class ExpertTab : NeoUIEntry
 {
+    private static readonly Dictionary<OpenBellBehavior, string> OpenBellBehaviorNames = new()
+    {
+        [OpenBellBehavior.Do_nothing] = Lang.T("Do nothing"),
+        [OpenBellBehavior.Enable_AutoRetainer] = Lang.T("Enable AutoRetainer"),
+        [OpenBellBehavior.Disable_AutoRetainer] = Lang.T("Disable AutoRetainer"),
+        [OpenBellBehavior.Pause_AutoRetainer] = Lang.T("Pause AutoRetainer"),
+    };
+
+    private static readonly Dictionary<TaskCompletedBehavior, string> TaskCompletedBehaviorNames = new()
+    {
+        [TaskCompletedBehavior.Close_retainer_list_and_disable_plugin] = Lang.T("Close retainer list and disable plugin"),
+        [TaskCompletedBehavior.Close_retainer_list_and_keep_plugin_enabled] = Lang.T("Close retainer list and keep plugin enabled"),
+        [TaskCompletedBehavior.Stay_in_retainer_list_and_disable_plugin] = Lang.T("Stay in retainer list and disable plugin"),
+        [TaskCompletedBehavior.Stay_in_retainer_list_and_keep_plugin_enabled] = Lang.T("Stay in retainer list and keep plugin enabled"),
+    };
+
     public override string Path => "Advanced/Expert Settings";
 
     public override NuiBuilder Builder { get; init; } = new NuiBuilder()
         .Section("Behavior")
-        .EnumComboFullWidth(null, "Action on accessing retainer bell if no ventures available:", () => ref C.OpenBellBehaviorNoVentures)
-        .EnumComboFullWidth(null, "Action on accessing retainer bell if any ventures available:", () => ref C.OpenBellBehaviorWithVentures)
-        .EnumComboFullWidth(null, "Task completion behavior after accessing bell:", () => ref C.TaskCompletedBehaviorAccess)
-        .EnumComboFullWidth(null, "Task completion behavior after manual enabling:", () => ref C.TaskCompletedBehaviorManual)
-        .EnumComboFullWidth(null, "Task completion behavior during plugin operation:", () => ref C.TaskCompletedBehaviorAuto)
+        .EnumComboFullWidth(null, "Action on accessing retainer bell if no ventures available:", () => ref C.OpenBellBehaviorNoVentures, names: OpenBellBehaviorNames)
+        .EnumComboFullWidth(null, "Action on accessing retainer bell if any ventures available:", () => ref C.OpenBellBehaviorWithVentures, names: OpenBellBehaviorNames)
+        .EnumComboFullWidth(null, "Task completion behavior after accessing bell:", () => ref C.TaskCompletedBehaviorAccess, names: TaskCompletedBehaviorNames)
+        .EnumComboFullWidth(null, "Task completion behavior after manual enabling:", () => ref C.TaskCompletedBehaviorManual, names: TaskCompletedBehaviorNames)
+        .EnumComboFullWidth(null, "Task completion behavior during plugin operation:", () => ref C.TaskCompletedBehaviorAuto, names: TaskCompletedBehaviorNames)
         .TextWrapped(ImGuiColors.DalamudGrey, "\"Close retainer list and disable plugin\" option for 3 previous settings is enforced during MultiMode operation.")
         .Checkbox("Stay in retainer menu if there are retainers to finish ventures within 5 minutes or less", () => ref C.Stay5, "This option is enforced during MultiMode operation.")
         .Checkbox($"Auto-disable plugin when closing retainer list", () => ref C.AutoDisable, "Only applies when you exit menu by yourself. Otherwise, settings above apply.")
