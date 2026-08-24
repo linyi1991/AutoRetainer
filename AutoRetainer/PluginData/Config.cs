@@ -54,6 +54,7 @@ internal unsafe class Config
     public TaskCompletedBehavior TaskCompletedBehaviorAuto = TaskCompletedBehavior.Stay_in_retainer_list_and_keep_plugin_enabled;
     public TaskCompletedBehavior TaskCompletedBehaviorManual = TaskCompletedBehavior.Stay_in_retainer_list_and_keep_plugin_enabled;
     public TaskCompletedBehavior TaskCompletedBehaviorAccess = TaskCompletedBehavior.Stay_in_retainer_list_and_keep_plugin_enabled;
+    public bool TwMigratedKeepRetainerListOpen = false;
     //public bool AutoPause = true;
     public bool Stay5 = true;
     public bool NoCurrentCharaOnTop = false;

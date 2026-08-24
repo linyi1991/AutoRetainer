@@ -128,6 +128,7 @@ public unsafe class AutoRetainer : IDalamudPlugin
     {
         EzConfig.Migrate<Config>();
         config = EzConfig.Init<Config>();
+        MigrateTwKeepRetainerListOpen();
 
         //windows
         NuiBuilder.Translate = Lang.T;
@@ -652,6 +653,39 @@ public unsafe class AutoRetainer : IDalamudPlugin
                 MultiMode.Enabled = false;
             }
         }
+    }
+
+    private void MigrateTwKeepRetainerListOpen()
+    {
+        if(C.TwMigratedKeepRetainerListOpen) return;
+
+        var changed = false;
+        changed |= KeepRetainerListOpen(ref C.TaskCompletedBehaviorAuto);
+        changed |= KeepRetainerListOpen(ref C.TaskCompletedBehaviorManual);
+        changed |= KeepRetainerListOpen(ref C.TaskCompletedBehaviorAccess);
+        C.TwMigratedKeepRetainerListOpen = true;
+
+        if(changed)
+        {
+            DuoLog.Information("已將 AutoRetainer 完成後行為改為保留僱員清單開啟。");
+        }
+
+        EzConfig.Save();
+    }
+
+    private static bool KeepRetainerListOpen(ref TaskCompletedBehavior behavior)
+    {
+        if(behavior == TaskCompletedBehavior.Close_retainer_list_and_disable_plugin)
+        {
+            behavior = TaskCompletedBehavior.Stay_in_retainer_list_and_disable_plugin;
+            return true;
+        }
+        if(behavior == TaskCompletedBehavior.Close_retainer_list_and_keep_plugin_enabled)
+        {
+            behavior = TaskCompletedBehavior.Stay_in_retainer_list_and_keep_plugin_enabled;
+            return true;
+        }
+        return false;
     }
 
     public void Dispose()
