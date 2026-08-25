@@ -73,6 +73,11 @@ internal unsafe class Config
 
     public int RetainerMenuDelay = 0;
     public List<VenturePlan> SavedPlans = [];
+    public string VentureTrackedImportText = "";
+    public bool VentureTrackedAnalyzeRecipes = true;
+    public bool VentureImportSubtractInventory = true;
+    public List<VentureTrackedGoal> VentureTrackedGoals = [];
+    public string VentureSelectedTrackedGoalGuid = "";
     public bool MultiWaitOnLoginScreen = false;
     public UnavailableVentureDisplay UnavailableVentureDisplay = UnavailableVentureDisplay.Hide;
 
@@ -274,4 +279,14 @@ internal unsafe class Config
 
     public bool MultiOnPluginLoad = false;
     public int MultiModeOnPluginLoadDelay = 10;
+}
+
+[Serializable]
+internal class VentureTrackedGoal
+{
+    public string Guid = System.Guid.NewGuid().ToString();
+    public string Name = "";
+    public string Text = "";
+    public bool AnalyzeRecipes = true;
+    public DateTime UpdatedAt = DateTime.Now;
 }

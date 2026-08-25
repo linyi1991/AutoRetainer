@@ -264,9 +264,9 @@ internal static unsafe class AutoGCHandin
         var step2 = step1->GetAsAtkComponentNode()->Component->UldManager.NodeList[1];
         var step3 = step2->GetAsAtkComponentNode()->Component->UldManager.NodeList[2];
         var text = GenericHelpers.ReadSeString(&step3->GetAsAtkTextNode()->NodeText).GetText();
-        //4619	Hide Armoury Chest Items
-        //4618	Hide Gear Set Items
-        //4617	Show All Items
+        // 4619 隱藏兵裝庫物品
+        // 4618 隱藏套裝配置物品
+        // 4617 顯示所有物品
         var hideArmory = Svc.Data.GetExcelSheet<Lumina.Excel.Sheets.Addon>().GetRow(4619).Text.ToDalamudString().GetText();
         var hideGearSet = Svc.Data.GetExcelSheet<Lumina.Excel.Sheets.Addon>().GetRow(4618).Text.ToDalamudString().GetText();
         var showAll = Svc.Data.GetExcelSheet<Lumina.Excel.Sheets.Addon>().GetRow(4617).Text.ToDalamudString().GetText();

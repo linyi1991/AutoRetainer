@@ -47,7 +47,7 @@ public sealed unsafe class GCCharacterConfiguration : InventoryManagementBase
 
                 ImGui.TableNextColumn();
                 ImGui.SetNextItemWidth(150f);
-                ImGuiEx.EnumCombo("##deliveryMode", ref characterData.GCDeliveryType);
+                ImGuiEx.EnumCombo("##deliveryMode", ref characterData.GCDeliveryType, Lang.GCDeliveryTypeNames);
                 ImGuiEx.DragDropRepopulate("Mode", characterData.GCDeliveryType, ref characterData.GCDeliveryType);
 
                 ImGui.PopID();

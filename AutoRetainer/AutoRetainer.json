@@ -2,6 +2,7 @@
     "Author": "кайт машина (Puni.sh)",
     "Name": "AutoRetainer 繁中 API13",
     "InternalName": "AutoRetainer",
+    "AssemblyVersion": "4.5.4.22",
     "Punchline": "自動收取並重新派出僱員探索任務。",
     "Description": "自用 API13 版 AutoRetainer，可自動收取並重新派出僱員探索任務，並保留 AutoPincher 需要的 AutoRetainer 整合介面。",
     "ApplicableVersion": "any",

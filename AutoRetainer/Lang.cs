@@ -168,6 +168,9 @@ internal static class Lang
         ["Delay, seconds"] = "延遲，秒",
         ["Auto-login on Game Boot"] = "遊戲啟動時自動登入",
         ["Disabled"] = "停用",
+        ["Hide Armoury Chest Items"] = "隱藏兵裝庫物品",
+        ["Hide Gear Set Items"] = "隱藏套裝配置物品",
+        ["Show All Items"] = "顯示所有物品",
         ["Last logged in character"] = "上次登入的角色",
         ["Delay"] = "延遲",
         ["Set appropriate delay to let plugins fully load before logging in and to allow yourself some time to cancel login if needed"] = "設定適當延遲，讓插件先載入完成，也保留取消登入的時間。",
@@ -672,6 +675,22 @@ internal static class Lang
         { UnlockMode.MultiSelect, "Pick max amount of destinations" },
         { UnlockMode.SpamOne, "Spam one destination" },
         { UnlockMode.WhileLevelling, "Include one unlock destination while levelling" },
+    });
+
+    internal static readonly ReadOnlyDictionary<GCDeliveryType, string> GCDeliveryTypeNames = new(new Dictionary<GCDeliveryType, string>()
+    {
+        { GCDeliveryType.Disabled, "停用" },
+        { GCDeliveryType.Hide_Armoury_Chest_Items, "隱藏兵裝庫物品" },
+        { GCDeliveryType.Hide_Gear_Set_Items, "隱藏套裝配置物品" },
+        { GCDeliveryType.Show_All_Items, "顯示所有物品" },
+    });
+
+    internal static readonly ReadOnlyDictionary<PlanCompleteBehavior, string> PlanCompleteBehaviorNames = new(new Dictionary<PlanCompleteBehavior, string>()
+    {
+        { PlanCompleteBehavior.Restart_plan, "重新從頭執行" },
+        { PlanCompleteBehavior.Assign_Quick_Venture, "改派快速探索" },
+        { PlanCompleteBehavior.Do_nothing, "不做任何事" },
+        { PlanCompleteBehavior.Repeat_last_venture, "重複最後一項" },
     });
 
     internal static readonly (string Normal, string GameFont) Digits = ("0123456789", "");
