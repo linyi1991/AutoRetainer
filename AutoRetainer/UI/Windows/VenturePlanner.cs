@@ -226,6 +226,18 @@ public sealed class VenturePlanner : Window
                         }
                         ImGuiEx.Tooltip(overwrite ? "覆蓋既有探索計畫" : "儲存探索計畫");
                     });
+
+                    if(ImGui.Button("清空目前僱員計畫"))
+                    {
+                        ClearRetainerPlan(adata);
+                        Notify.Success("已清空目前僱員的探索計畫。");
+                        EzConfig.Save();
+                    }
+                    ImGui.SameLine();
+                    if(ImGui.Button("完整刪除此計畫"))
+                    {
+                        DeletePlanEverywhere(adata.VenturePlan.Name);
+                    }
                 }
 
                 DrawTeamcraftImporter(adata);
@@ -515,6 +527,11 @@ public sealed class VenturePlanner : Window
         {
             DeleteTrackedGoal(selected);
         }
+        ImGui.SameLine();
+        if(ImGui.Button("完整刪除選取"))
+        {
+            DeleteTrackedGoalEverywhere(selected);
+        }
         if(disableUpdate) ImGui.EndDisabled();
 
         if(selected != null)
@@ -607,6 +624,62 @@ public sealed class VenturePlanner : Window
         C.VentureSelectedTrackedGoalGuid = C.VentureTrackedGoals.OrderByDescending(x => x.UpdatedAt).FirstOrDefault()?.Guid ?? "";
         EzConfig.Save();
         Notify.Success($"已刪除追蹤目標：{goal.Name}");
+    }
+
+    private void DeleteTrackedGoalEverywhere(VentureTrackedGoal goal)
+    {
+        if(goal == null) return;
+        var name = goal.Name;
+        C.VentureTrackedGoals.Remove(goal);
+        C.VentureSelectedTrackedGoalGuid = C.VentureTrackedGoals.OrderByDescending(x => x.UpdatedAt).FirstOrDefault()?.Guid ?? "";
+        var cleared = DeletePlanEverywhere(name, notify: false);
+        Notify.Success($"已完整刪除：{name}，並清除 {cleared} 位僱員的同名探索計畫。");
+        EzConfig.Save();
+    }
+
+    private static void ClearRetainerPlan(AdditionalRetainerData adata)
+    {
+        adata.EnablePlanner = false;
+        adata.LinkedVenturePlan = "";
+        adata.VenturePlan = new()
+        {
+            PlanCompleteBehavior = PlanCompleteBehavior.Do_nothing
+        };
+        adata.VenturePlanIndex = 0;
+    }
+
+    private static int DeletePlanEverywhere(string planName, bool notify = true)
+    {
+        if(planName.IsNullOrEmpty())
+        {
+            Notify.Warning("目前計畫沒有名稱，無法完整刪除同名計畫。");
+            return 0;
+        }
+
+        var removedSavedPlans = C.SavedPlans.RemoveAll(x => x.Name == planName);
+        var clearedRetainers = 0;
+        foreach(var adata in C.AdditionalData.Values)
+        {
+            if(adata.VenturePlan.Name != planName) continue;
+            ClearRetainerPlan(adata);
+            clearedRetainers++;
+        }
+
+        if(C.VentureTrackedGoals != null)
+        {
+            C.VentureTrackedGoals.RemoveAll(x => x.Name == planName);
+            if(!C.VentureSelectedTrackedGoalGuid.IsNullOrEmpty() && C.VentureTrackedGoals.All(x => x.Guid != C.VentureSelectedTrackedGoalGuid))
+            {
+                C.VentureSelectedTrackedGoalGuid = C.VentureTrackedGoals.OrderByDescending(x => x.UpdatedAt).FirstOrDefault()?.Guid ?? "";
+            }
+        }
+
+        EzConfig.Save();
+        if(notify)
+        {
+            Notify.Success($"已完整刪除：{planName}，移除 {removedSavedPlans} 份共用計畫，清除 {clearedRetainers} 位僱員。");
+        }
+        return clearedRetainers;
     }
 
     private static int GetImportLineCount(string text)
