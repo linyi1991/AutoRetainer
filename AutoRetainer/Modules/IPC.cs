@@ -21,6 +21,7 @@ internal static class IPC
         Svc.PluginInterface.GetIpcProvider<object>("AutoRetainer.Init").RegisterAction(() => { });
         Svc.PluginInterface.GetIpcProvider<bool>("AutoRetainer.GetSuppressed").RegisterFunc(GetSuppressed);
         Svc.PluginInterface.GetIpcProvider<bool, object>("AutoRetainer.SetSuppressed").RegisterAction(SetSuppressed);
+        Svc.PluginInterface.GetIpcProvider<object>("AutoRetainer.RequestAutoRetainer").RegisterAction(RequestAutoRetainer);
         Svc.PluginInterface.GetIpcProvider<bool>("AutoRetainer.GetMultiModeEnabled").RegisterFunc(GetMultiModeEnabled);
         Svc.PluginInterface.GetIpcProvider<bool, object>("AutoRetainer.SetMultiModeEnabled").RegisterAction(SetMultiModeEnabled);
         Svc.PluginInterface.GetIpcProvider<uint, object>("AutoRetainer.SetVenture").RegisterAction(SetVenture);
@@ -48,6 +49,7 @@ internal static class IPC
         Svc.PluginInterface.GetIpcProvider<object>("AutoRetainer.Init").UnregisterAction();
         Svc.PluginInterface.GetIpcProvider<bool>("AutoRetainer.GetSuppressed").UnregisterFunc();
         Svc.PluginInterface.GetIpcProvider<bool, object>("AutoRetainer.SetSuppressed").UnregisterAction();
+        Svc.PluginInterface.GetIpcProvider<object>("AutoRetainer.RequestAutoRetainer").UnregisterAction();
         Svc.PluginInterface.GetIpcProvider<bool>("AutoRetainer.GetMultiModeEnabled").UnregisterFunc();
         Svc.PluginInterface.GetIpcProvider<bool, object>("AutoRetainer.SetMultiModeEnabled").UnregisterAction();
         Svc.PluginInterface.GetIpcProvider<uint, object>("AutoRetainer.SetVenture").UnregisterAction();
@@ -159,6 +161,16 @@ internal static class IPC
     private static void SetSuppressed(bool s)
     {
         Suppressed = s;
+    }
+
+    private static void RequestAutoRetainer()
+    {
+        Suppressed = false;
+        Svc.Framework.RunOnTick(() =>
+        {
+            Suppressed = false;
+            SchedulerMain.EnablePlugin(PluginEnableReason.Auto);
+        });
     }
 
     private static bool GetMultiModeEnabled()
