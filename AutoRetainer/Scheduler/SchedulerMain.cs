@@ -64,6 +64,14 @@ internal static unsafe class SchedulerMain
             }
             if(TryGetAddonByName<AtkUnitBase>("RetainerList", out var addon) && addon->IsVisible)
             {
+                if(P.ManualRetainerListOpen)
+                {
+                    if(EzThrottler.Throttle("ManualRetainerListOpen", 5000))
+                    {
+                        DebugLog("Retainer list was opened manually; waiting for the user to close it before resuming automation.");
+                    }
+                    return;
+                }
                 if(Utils.GenericThrottle)
                 {
                     if(!P.TaskManager.IsBusy)
@@ -220,7 +228,6 @@ internal static unsafe class SchedulerMain
                                     {
                                         DebugLog($"Scheduling closing as Artisan is running");
                                         P.TaskManager.Enqueue(RetainerListHandlers.CloseRetainerList);
-                                        P.TaskManager.Enqueue(DisablePlugin);
                                     }
                                     else
                                     {

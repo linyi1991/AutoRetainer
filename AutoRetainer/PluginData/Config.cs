@@ -51,10 +51,11 @@ internal unsafe class Config
 
     public OpenBellBehavior OpenBellBehaviorNoVentures = OpenBellBehavior.Enable_AutoRetainer;
     public OpenBellBehavior OpenBellBehaviorWithVentures = OpenBellBehavior.Enable_AutoRetainer;
-    public TaskCompletedBehavior TaskCompletedBehaviorAuto = TaskCompletedBehavior.Stay_in_retainer_list_and_keep_plugin_enabled;
+    public TaskCompletedBehavior TaskCompletedBehaviorAuto = TaskCompletedBehavior.Close_retainer_list_and_keep_plugin_enabled;
     public TaskCompletedBehavior TaskCompletedBehaviorManual = TaskCompletedBehavior.Stay_in_retainer_list_and_keep_plugin_enabled;
     public TaskCompletedBehavior TaskCompletedBehaviorAccess = TaskCompletedBehavior.Stay_in_retainer_list_and_keep_plugin_enabled;
     public bool TwMigratedKeepRetainerListOpen = false;
+    public bool TwMigratedRetainerWindowOwnership = false;
     //public bool AutoPause = true;
     public bool Stay5 = true;
     public bool NoCurrentCharaOnTop = false;

@@ -52,6 +52,7 @@ public unsafe class AutoRetainer : IDalamudPlugin
     internal Memory Memory;
     internal bool WasEnabled = false;
     internal bool IsCloseActionAutomatic = false;
+    internal bool ManualRetainerListOpen = false;
     internal long LastMovementAt;
     internal Vector3 LastPosition;
     internal bool IsNextToBell;
@@ -129,6 +130,7 @@ public unsafe class AutoRetainer : IDalamudPlugin
         EzConfig.Migrate<Config>();
         config = EzConfig.Init<Config>();
         MigrateTwKeepRetainerListOpen();
+        MigrateTwRetainerWindowOwnership();
 
         //windows
         NuiBuilder.Translate = Lang.T;
@@ -660,7 +662,6 @@ public unsafe class AutoRetainer : IDalamudPlugin
         if(C.TwMigratedKeepRetainerListOpen) return;
 
         var changed = false;
-        changed |= KeepRetainerListOpen(ref C.TaskCompletedBehaviorAuto);
         changed |= KeepRetainerListOpen(ref C.TaskCompletedBehaviorManual);
         changed |= KeepRetainerListOpen(ref C.TaskCompletedBehaviorAccess);
         C.TwMigratedKeepRetainerListOpen = true;
@@ -669,6 +670,25 @@ public unsafe class AutoRetainer : IDalamudPlugin
         {
             DuoLog.Information("已將 AutoRetainer 完成後行為改為保留僱員清單開啟。");
         }
+
+        EzConfig.Save();
+    }
+
+    private void MigrateTwRetainerWindowOwnership()
+    {
+        if(C.TwMigratedRetainerWindowOwnership) return;
+
+        C.TaskCompletedBehaviorAuto = TaskCompletedBehavior.Close_retainer_list_and_keep_plugin_enabled;
+        if(C.TaskCompletedBehaviorManual == TaskCompletedBehavior.Close_retainer_list_and_disable_plugin)
+        {
+            C.TaskCompletedBehaviorManual = TaskCompletedBehavior.Close_retainer_list_and_keep_plugin_enabled;
+        }
+        if(C.TaskCompletedBehaviorAccess == TaskCompletedBehavior.Close_retainer_list_and_disable_plugin)
+        {
+            C.TaskCompletedBehaviorAccess = TaskCompletedBehavior.Close_retainer_list_and_keep_plugin_enabled;
+        }
+        C.TwMigratedRetainerWindowOwnership = true;
+        DuoLog.Information("已將 AutoRetainer 自動任務完成後行為改為關閉僱員清單並保持插件啟用。");
 
         EzConfig.Save();
     }
@@ -782,6 +802,7 @@ public unsafe class AutoRetainer : IDalamudPlugin
             if(!value)
             {
                 ConditionWasEnabled = false;
+                ManualRetainerListOpen = false;
                 DebugLog("ConditionWasEnabled = false;");
             }
             if(!SkipNextEnable)
@@ -790,6 +811,11 @@ public unsafe class AutoRetainer : IDalamudPlugin
                 {
                     if(value)
                     {
+                        if(SchedulerMain.PluginEnabled && !IsInteractionAutomatic)
+                        {
+                            ManualRetainerListOpen = true;
+                            DebugLog("Manual retainer list opened while AutoRetainer was enabled; automation will wait until it closes.");
+                        }
                         if(Utils.MultiModeOrArtisan)
                         {
                             WasEnabled = false;
