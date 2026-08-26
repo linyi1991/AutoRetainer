@@ -38,11 +38,7 @@ internal static class Artisan
                     var bell = Utils.GetReachableRetainerBell(true);
                     if(AnyRetainersAvailable() && bell != null)
                     {
-                        if(!WasPaused)
-                        {
-                            WasPaused = true;
-                            SetStopRequest(true);
-                        }
+                        PauseArtisanForRetainers();
 
                         if(!SchedulerMain.PluginEnabled || SchedulerMain.Reason != PluginEnableReason.Artisan)
                         {
@@ -67,10 +63,60 @@ internal static class Artisan
                 }
                 if(EzThrottler.Check("ArtisanCanReenableOccupied"))
                 {
-                    WasPaused = false;
-                    SetStopRequest(false);
+                    ResumeArtisanAfterRetainers();
                 }
             }
+        }
+    }
+
+    private static void PauseArtisanForRetainers()
+    {
+        try
+        {
+            if(!WasPaused)
+            {
+                WasPaused = true;
+                DebugLog("Pausing Artisan because retainers are ready");
+            }
+
+            if(!GetStopRequest)
+            {
+                SetStopRequest(true);
+            }
+
+            if(IsListRunning && !IsListPaused)
+            {
+                SetListPause(true);
+            }
+        }
+        catch(IpcNotReadyError) { }
+        catch(Exception ex)
+        {
+            ex.LogWarning();
+        }
+    }
+
+    private static void ResumeArtisanAfterRetainers()
+    {
+        try
+        {
+            WasPaused = false;
+            DebugLog("Resuming Artisan after retainer processing");
+
+            if(GetStopRequest)
+            {
+                SetStopRequest(false);
+            }
+
+            if(IsListPaused)
+            {
+                SetListPause(false);
+            }
+        }
+        catch(IpcNotReadyError) { }
+        catch(Exception ex)
+        {
+            ex.LogWarning();
         }
     }
 
