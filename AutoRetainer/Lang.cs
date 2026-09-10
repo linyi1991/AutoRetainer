@@ -693,9 +693,27 @@ internal static class Lang
         { PlanCompleteBehavior.Repeat_last_venture, "重複最後一項" },
     });
 
+    // Backport of upstream #164: retain TW literals if the regional sheet is missing.
+    private static string[] ReadBellText(uint[] rows, string[] fallback)
+    {
+        try
+        {
+            var sheet = Svc.Data.GetExcelSheet<QuestDialogueText>(name: "custom/000/CmnDefRetainerCall_00010");
+            return Helpers.RetainerCompatibility.MenuCandidates(
+                rows.Select(row => sheet?.GetRowOrDefault(row)?.Value.GetText()).Concat(fallback));
+        }
+        catch(Exception ex)
+        {
+            PluginLog.Warning($"[AutoRetainer TW] 僱員選單文字讀取失敗，改用既有翻譯：{ex.Message}");
+            return Helpers.RetainerCompatibility.MenuCandidates(fallback);
+        }
+    }
+
     internal static readonly (string Normal, string GameFont) Digits = ("0123456789", "");
 
-    internal static readonly string[] FieldExplorationNames =
+    private static string[] cachedFieldExplorationNames;
+    internal static string[] FieldExplorationNames => cachedFieldExplorationNames ??= ReadBellText([196, 198, 200, 202], FieldExplorationNamesFallback);
+    private static readonly string[] FieldExplorationNamesFallback =
     [
         "Field Exploration.",
         "Highland Exploration.",
@@ -727,7 +745,9 @@ internal static class Lang
         "탐색수행: 물가 (필요한 집사 급료: 2개)",
     ];
 
-    internal static readonly string[] HuntingVentureNames =
+    private static string[] cachedHuntingVentureNames;
+    internal static string[] HuntingVentureNames => cachedHuntingVentureNames ??= ReadBellText([195, 197, 199, 201], HuntingVentureNamesFallback);
+    private static readonly string[] HuntingVentureNamesFallback =
     [
         "Hunting.",
         "Mining.",
@@ -759,7 +779,9 @@ internal static class Lang
         "조달수행: 어부 (필요한 집사 급료: 1개)",
     ];
 
-    internal static readonly string[] QuickExploration =
+    private static string[] cachedQuickExploration;
+    internal static string[] QuickExploration => cachedQuickExploration ??= ReadBellText([402], QuickExplorationFallback);
+    private static readonly string[] QuickExplorationFallback =
     [
         "Quick Exploration.",
         "ほりだしもの依頼　（必要ベンチャースクリップ：2枚）",
@@ -795,7 +817,9 @@ internal static class Lang
         "'주택'으로 들어가시겠습니까?",
     ];
 
-    internal static readonly string[] RetainerAskCategoryText =
+    private static string[] cachedRetainerAskCategoryText;
+    internal static string[] RetainerAskCategoryText => cachedRetainerAskCategoryText ??= ReadBellText([194], RetainerAskCategoryTextFallback);
+    private static readonly string[] RetainerAskCategoryTextFallback =
     [
         "依頼するリテイナーベンチャーを選んでください",
         "请选择要委托的探险",

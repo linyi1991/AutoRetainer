@@ -1420,7 +1420,10 @@ public static unsafe class Utils
 
     internal static bool TrySelectSpecificEntry(IEnumerable<string> text, Func<bool> Throttler = null)
     {
-        return TrySelectSpecificEntry((x) => x.StartsWithAny(text), Throttler);
+        // Empty localized strings must never match every menu entry.
+        var candidates = RetainerCompatibility.MenuCandidates(text);
+        if(candidates.Length == 0) return false;
+        return TrySelectSpecificEntry((x) => x.StartsWithAny(candidates), Throttler);
         /*if (TryGetAddonByName<AddonSelectString>("SelectString", out var addon) && IsAddonReady(&addon->AtkUnitBase))
         {
             var entry = GetEntries(addon).FirstOrDefault(x => x.EqualsAny(text));

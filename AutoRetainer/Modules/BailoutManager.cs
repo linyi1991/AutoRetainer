@@ -16,9 +16,13 @@ internal static unsafe class BailoutManager
 
     internal static void Tick()
     {
+        if(!C.EnableBailout)
+        {
+            NoSelectString = Environment.TickCount64;
+        }
         if(C.EnableBailout)
         {
-            if(SchedulerMain.PluginEnabled || (MultiMode.Enabled && VoyageUtils.IsInVoyagePanel()))
+            if(Helpers.RetainerCompatibility.CanRecoverMenu(SchedulerMain.PluginEnabled, MultiMode.Enabled && VoyageUtils.IsInVoyagePanel(), P.ManualRetainerListOpen, IPC.Suppressed))
             {
                 if(!Utils.IsBusy && !VoyageScheduler.Enabled && TryGetAddonByName<AtkUnitBase>("SelectString", out var addon) && IsAddonReady(addon))
                 {
@@ -36,6 +40,12 @@ internal static unsafe class BailoutManager
                 {
                     NoSelectString = Environment.TickCount64;
                 }
+            }
+
+            else
+            {
+                // Do not carry an expired timeout into a newly owned automation window.
+                NoSelectString = Environment.TickCount64;
             }
 
             if(!Svc.ClientState.IsLoggedIn && C.EnableCharaSelectBailout)
